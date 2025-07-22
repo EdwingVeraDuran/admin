@@ -10,7 +10,7 @@ class Field extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [Text(label).semiBold.small, Gap(4), child],
+      children: [Text(label).muted.small, Gap(4), child],
     );
   }
 }
