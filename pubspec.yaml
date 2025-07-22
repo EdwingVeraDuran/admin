@@ -7,6 +7,8 @@ environment:
   sdk: ^3.8.1
 
 dependencies:
+  dotted_border: ^3.1.0
+  file_picker: ^10.2.0
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
