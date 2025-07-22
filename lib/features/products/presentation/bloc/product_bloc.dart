@@ -94,7 +94,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     Emitter<ProductState> emit,
   ) async {
     try {
-      await productRepo.updateProduct(event.product, event.image!);
+      await productRepo.updateProduct(event.product, event.image);
       add(ReadProducts());
     } catch (e, stackTrace) {
       emit(ProductsError(e.toString()));

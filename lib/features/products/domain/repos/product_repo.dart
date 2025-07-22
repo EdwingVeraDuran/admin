@@ -11,7 +11,7 @@ abstract class ProductRepo {
     int page,
     int pageSize,
   );
-  Future<void> updateProduct(Product product, File image);
+  Future<void> updateProduct(Product product, [File? image]);
   Future<void> deleteProduct(String id);
   Future<void> uploadProductImage(String id, File image);
   Future<void> updateProductImage(String id, File image);
