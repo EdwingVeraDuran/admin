@@ -53,6 +53,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     brand = product.brand;
   }
 
+  void send() {
+    if (name.isEmpty) return;
+    if (description.isEmpty) return;
+    if (code.isEmpty) return;
+    if (buyPrice <= 0) return;
+    if (sellPrice <= 0) return;
+    if (category == null) return;
+    if (brand == null) return;
+
+    final Product product = Product(
+      id: widget.product?.id,
+      code: code,
+      name: name,
+      description: description,
+      stock: stock,
+      buyPrice: buyPrice,
+      sellPrice: sellPrice,
+      category: category!,
+      brand: brand!,
+    );
+    widget.product != null
+        ? context.read<ProductBloc>().add(UpdateProduct(product, image))
+        : context.read<ProductBloc>().add(CreateProduct(product, image!));
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,27 +149,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                         PrimaryButton(
-                          onPressed: () {
-                            final Product product = Product(
-                              id: widget.product?.id,
-                              code: code,
-                              name: name,
-                              description: description,
-                              stock: stock,
-                              buyPrice: buyPrice,
-                              sellPrice: sellPrice,
-                              category: category!,
-                              brand: brand!,
-                            );
-                            widget.product != null
-                                ? context.read<ProductBloc>().add(
-                                    UpdateProduct(product, image),
-                                  )
-                                : context.read<ProductBloc>().add(
-                                    CreateProduct(product, image!),
-                                  );
-                            Navigator.of(context).pop();
-                          },
+                          onPressed: send,
                           child: Text(
                             widget.product != null ? 'Actualizar' : 'Crear',
                           ),
