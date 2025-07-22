@@ -1,4 +1,7 @@
+import 'package:admin/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:admin/features/auth/presentation/bloc/auth_event.dart';
 import 'package:admin/shared/widgets/field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,13 +16,12 @@ class _LoginPageState extends State<LoginPage> {
   final password = TextEditingController();
 
   void onSend() {
-    // final emailText = email.text.trim();
-    // final passwordText = password.text.trim();
+    final emailText = email.text.trim();
+    final passwordText = password.text.trim();
 
-    // context.read<AuthBloc>().add(
-    //   AuthLoginRequested(email: emailText, password: passwordText),
-    // );
-    // context.goNamed('home');
+    context.read<AuthBloc>().add(LoginRequested(emailText, passwordText));
+    email.clear();
+    password.clear();
   }
 
   @override
@@ -37,7 +39,8 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.all(24),
           child: Column(
             children: [
-              Text('Panel Coqueta Shop'),
+              Text('Panel Coqueta Shop').semiBold.x2Large,
+              Gap(24),
               Field(
                 label: 'Correo',
                 child: TextField(controller: email),
