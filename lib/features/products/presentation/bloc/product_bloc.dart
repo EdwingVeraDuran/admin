@@ -46,7 +46,12 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       emit(
         response.data.isNotEmpty
-            ? ProductsList(response.data)
+            ? ProductsList(
+                response.data,
+                page: _query.page,
+                pageSize: _query.pageSize,
+                totalPages: totalPages,
+              )
             : ProductsEmpty(),
       );
     } catch (e) {
