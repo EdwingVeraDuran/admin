@@ -40,12 +40,13 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     try {
       emit(CategoriesLoading());
       final response = _query.isSearch
-          ? await categoryRepo.readCategories(_query.page, _query.pageSize)
-          : await categoryRepo.searchCategories(
+          ? await categoryRepo.searchCategories(
               _query.query!,
               _query.page,
               _query.pageSize,
-            );
+            )
+          : await categoryRepo.readCategories(_query.page, _query.pageSize);
+
       totalPages = (response.total / _query.pageSize).ceil();
       emit(
         response.data.isNotEmpty
