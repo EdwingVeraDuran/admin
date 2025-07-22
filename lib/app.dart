@@ -1,3 +1,10 @@
+import 'package:admin/core/injection.dart';
+import 'package:admin/features/auth/domain/auth_repo.dart';
+import 'package:admin/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:admin/features/auth/presentation/bloc/auth_state.dart';
+import 'package:admin/features/auth/presentation/pages/login_page.dart';
+import 'package:admin/shared/layout/dashboard_layout.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class AdminApp extends StatelessWidget {
@@ -5,9 +12,26 @@ class AdminApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShadcnApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorScheme: ColorSchemes.lightRose(), radius: 1),
+    return MultiBlocProvider(
+      providers: [BlocProvider(create: (context) => AuthBloc(sl<AuthRepo>()))],
+      child: ShadcnApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(colorScheme: ColorSchemes.lightRose(), radius: 1),
+        home: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            if (state is AuthLoading) {
+              return Scaffold(
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            if (state is Authenticated) {
+              return DashboardLayout();
+            }
+            return LoginPage();
+          },
+        ),
+      ),
     );
   }
 }
