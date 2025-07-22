@@ -2,6 +2,8 @@ import 'package:admin/core/injection.dart';
 import 'package:admin/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:admin/features/auth/presentation/bloc/auth_state.dart';
 import 'package:admin/features/auth/presentation/pages/login_page.dart';
+import 'package:admin/features/brands/presentation/bloc/brand_bloc.dart';
+import 'package:admin/features/categories/presentation/bloc/category_bloc.dart';
 import 'package:admin/features/products/presentation/bloc/product_bloc.dart';
 import 'package:admin/shared/layout/dashboard_layout.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +18,8 @@ class AdminApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => sl<AuthBloc>()),
         BlocProvider(create: (context) => sl<ProductBloc>()),
+        BlocProvider(create: (context) => sl<BrandBloc>()),
+        BlocProvider(create: (context) => sl<CategoryBloc>()),
       ],
       child: ShadcnApp(
         debugShowCheckedModeBanner: false,
