@@ -10,6 +10,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<CheckAuthStatus>(_onCheckAuthStatus);
     on<LoginRequested>(_onLoginRequested);
     on<LogoutRequested>(_onLogoutRequested);
+    add(CheckAuthStatus());
   }
 
   void _onCheckAuthStatus(CheckAuthStatus event, Emitter<AuthState> emit) {
