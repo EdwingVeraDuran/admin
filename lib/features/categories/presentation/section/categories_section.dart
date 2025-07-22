@@ -3,7 +3,8 @@ import 'package:admin/features/categories/presentation/bloc/category_bloc.dart';
 import 'package:admin/features/categories/presentation/bloc/category_event.dart';
 import 'package:admin/features/categories/presentation/bloc/category_state.dart';
 import 'package:admin/shared/layout/widgets/dialogs/confirm_delete_dialog.dart';
-import 'package:admin/shared/layout/widgets/sections/popover_button.dart';
+import 'package:admin/shared/layout/widgets/dialogs/single_input_dialog.dart';
+import 'package:admin/shared/layout/widgets/sections/create_button.dart';
 import 'package:admin/shared/layout/widgets/sections/section.dart';
 import 'package:admin/shared/layout/widgets/table/table_widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,10 +19,19 @@ class CategoriesSection extends StatelessWidget {
       builder: (context, state) {
         return Section(
           title: 'Categorías',
-          actionButton: PopoverButton(
-            placeholder: 'Nombre',
-            onSubmitted: (value) => context.read<CategoryBloc>().add(
-              CreateCategory(Category(name: value)),
+          actionButton: CreateButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => SingleInputDialog(
+                title: 'Crear categoria',
+                placeholder: 'Nombre de categoria',
+                onSubmitted: (value) {
+                  if (value.isEmpty) return;
+                  context.read<CategoryBloc>().add(
+                    CreateCategory(Category(name: value)),
+                  );
+                },
+              ),
             ),
           ),
           tableHeader: _header(),
@@ -53,23 +63,18 @@ class CategoriesSection extends StatelessWidget {
           cells: [
             tableCell(c.name),
             actionsCell(
-              onEdit: (context) => showPopover(
+              onEdit: (context) => showDialog(
                 context: context,
-                alignment: Alignment.topCenter,
-                offset: Offset(0, 8),
-                builder: (context) => ModalContainer(
-                  child: SizedBox(
-                    width: 200,
-                    child: TextField(
-                      initialValue: c.name,
-                      onSubmitted: (value) {
-                        context.read<CategoryBloc>().add(
-                          UpdateCategory(Category(id: c.id, name: value)),
-                        );
-                        closeOverlay(context);
-                      },
-                    ),
-                  ),
+                builder: (context) => SingleInputDialog(
+                  title: 'Editar categoria',
+                  placeholder: 'Nombre de categoria',
+                  value: c.name,
+                  onSubmitted: (value) {
+                    if (value.isEmpty) return;
+                    context.read<CategoryBloc>().add(
+                      UpdateCategory(Category(id: c.id, name: value)),
+                    );
+                  },
                 ),
               ),
               onDelete: (context) => showDialog(

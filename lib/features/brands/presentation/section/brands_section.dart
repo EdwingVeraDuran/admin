@@ -3,7 +3,8 @@ import 'package:admin/features/brands/presentation/bloc/brand_bloc.dart';
 import 'package:admin/features/brands/presentation/bloc/brand_event.dart';
 import 'package:admin/features/brands/presentation/bloc/brand_state.dart';
 import 'package:admin/shared/layout/widgets/dialogs/confirm_delete_dialog.dart';
-import 'package:admin/shared/layout/widgets/sections/popover_button.dart';
+import 'package:admin/shared/layout/widgets/dialogs/single_input_dialog.dart';
+import 'package:admin/shared/layout/widgets/sections/create_button.dart';
 import 'package:admin/shared/layout/widgets/sections/section.dart';
 import 'package:admin/shared/layout/widgets/table/table_widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,10 +19,20 @@ class BrandsSection extends StatelessWidget {
       builder: (context, state) {
         return Section(
           title: 'Marcas',
-          actionButton: PopoverButton(
-            placeholder: 'Nombre',
-            onSubmitted: (value) =>
-                context.read<BrandBloc>().add(CreateBrand(Brand(name: value))),
+          actionButton: CreateButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => SingleInputDialog(
+                title: 'Crear marca',
+                placeholder: 'Nombre de marca',
+                onSubmitted: (value) {
+                  if (value.isEmpty) return;
+                  context.read<BrandBloc>().add(
+                    CreateBrand(Brand(name: value)),
+                  );
+                },
+              ),
+            ),
           ),
           tableHeader: _header(),
           tableData: state is BrandsList ? _data(state.brands) : [],
@@ -52,23 +63,18 @@ class BrandsSection extends StatelessWidget {
           cells: [
             tableCell(b.name),
             actionsCell(
-              onEdit: (context) => showPopover(
+              onEdit: (context) => showDialog(
                 context: context,
-                alignment: Alignment.topCenter,
-                offset: Offset(0, 8),
-                builder: (context) => ModalContainer(
-                  child: SizedBox(
-                    width: 200,
-                    child: TextField(
-                      initialValue: b.name,
-                      onSubmitted: (value) {
-                        context.read<BrandBloc>().add(
-                          UpdateBrand(Brand(id: b.id, name: value)),
-                        );
-                        closeOverlay(context);
-                      },
-                    ),
-                  ),
+                builder: (context) => SingleInputDialog(
+                  title: 'Editar marca',
+                  placeholder: 'Nombre de marca',
+                  value: b.name,
+                  onSubmitted: (value) {
+                    if (value.isEmpty) return;
+                    context.read<BrandBloc>().add(
+                      UpdateBrand(Brand(id: b.id, name: value)),
+                    );
+                  },
                 ),
               ),
               onDelete: (context) => showDialog(
